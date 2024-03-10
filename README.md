@@ -5,4 +5,4 @@ Repository to study and understand the Finite-Difference Time-Domain numerical m
 
 * **FDTD_1D**: .
 
-![Couplings](/FDTD_1D/animated_plot.gif)
+![Couplings](/FDTD_1D/ABC_animated_plot.gif)
