@@ -57,10 +57,8 @@ int main(){
             ez[100] += j;
         }else{
             //Hardwire a source node
-            ez[50] += exp(-(qTime - 30.) * (qTime-30.) / 100. );
+            ez[0] += exp(-(qTime - 30.) * (qTime-30.) / 100. );
         }
-
-        
 
         //printf("%g \n", ez[50]);
         writeFile(hy, ez, qTime);
