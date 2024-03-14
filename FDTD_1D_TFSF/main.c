@@ -1,13 +1,16 @@
-/*Bare-Bones Simulation: FDTD method for 1D code*/
+/*TFSF Boundary: FDTD method for 1D code
+TFSF boundary between hy[49] and ez[50] and 
+dielectric material starting at ez[100]*/
 
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 
 #define SIZE 200
 
 void writeFile(double mag[], double elec[], int filenumber){
-    char filename[40];
-    sprintf(filename, "ABC_data/time=%d.csv", filenumber);
+    char filename[100];
+    sprintf(filename, "data_inho/time=%d.csv", filenumber);
 
     FILE *fptr = fopen(filename, "w");
 
@@ -28,43 +31,54 @@ double source_current(int time){
 }//end source_current function
 
 int main(){
+
+    clock_t start, end;
+    double cpu_time_used;
+
+    start = clock();
     
-    int activate_current = 1;
-    double ez[SIZE] = {0.}, hy[SIZE] = {0.}, jz[SIZE] = {0.} ,imp0 = 377.0;
-    int qTime, maxTime = 250, mm;
+    double ez[SIZE] = {0.}, hy[SIZE-1] = {0.}, epsR[SIZE], imp0 = 376.73;
+    int qTime, maxTime = 450, mm;
+
+    /*set relative permittivity*/
+        for(mm = 0; mm < SIZE; mm++){
+            if(mm < 100) epsR[mm] = 1.0;
+            else epsR[mm] = 9.0;
+        }
 
     //Do time stepping
     for(qTime = 0; qTime < maxTime; qTime++){
-        
-        //Applying Absorbing Boundary Condition for hy[Size-1]
-        hy[SIZE-1] = hy[SIZE-2];
+        //Now the grid is finished at E node.
+
         // Update the magnetic field
         for(mm = 0; mm < SIZE - 1; mm++){
             hy[mm] = hy[mm] + ( (ez[mm+1] - ez[mm])/imp0 );
         }//end for magnetic field
 
+        //correction for the Hy adyacent
+        hy[49] += -exp(- (qTime - 30.)*(qTime - 30.)/100. )/imp0;
 
-        //Applying an Absorbing Boundary Condition for ez[0]
+        //Simple an Absorbing Boundary Condition for ez[0] and ez[SIZE-1]
         ez[0] = ez[1];
+        ez[SIZE-1] = ez[SIZE-2];
+
         //Update electric field
         for(mm = 1; mm < SIZE; mm++){
-            ez[mm] = ez[mm] + ( imp0*(hy[mm] - hy[mm-1]) );
+            ez[mm] = ez[mm] + ( imp0*(hy[mm] - hy[mm-1])/epsR[mm] );
         }//End for electric field 
 
-        //Habilitates current term in Ampere's Law
-        if( activate_current == 1){
-            double j = source_current(qTime);
-            ez[100] += j;
-        }else{
-            //Hardwire a source node
-            ez[0] += exp(-(qTime - 30.) * (qTime-30.) / 100. );
-        }
+        //correction for Ez adjacent to TFSF boundary
+        ez[50] += exp( - (qTime +0.5 - (-0.5) - 30.) * 
+                         (qTime +0.5 - (-0.5) - 30.)/100.);
 
         //printf("%g \n", ez[50]);
         writeFile(hy, ez, qTime);
 
     }//end for
 
-    return 0;
+    end = clock();
+    cpu_time_used = ( (double)(end-start) )/CLOCKS_PER_SEC;
+	printf("Program Running Time = %.2e s.\n", cpu_time_used);
 
+    return 0;
 }
