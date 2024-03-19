@@ -1,0 +1,33 @@
+This is a list of all compilers for the codes: 
+
+-File Operations
+Write file:		gcc -c src/File_operations/write_file.c -Iinclude -o write_file.o
+Create folder:		gcc -c src/File_operations/create_folder.c -Iinclude -o create_folder.o
+Input reader: 		gcc -c src/File_operations/read_input.c -Iinclude -o read_input.o
+
+-Plasma Function
+Plasma Parameters:	gcc -c src/Plasma_function/plasma_params.c -Iinclude -o plasma_params.o
+
+-Field_components
+B Function              gcc -c src/Field_components/B_field.c -Iinclude -o B_field.o
+E Function		gcc -c src/Field_components/E_field.c -Iinclude -o E_field.o
+Field Assemble          gcc -c src/Field_components/field_assemble.c -Iinclude -o field_assemble.o
+
+Boundary Conditions
+Conducting boundary	gcc -c src/Boundary_conditions/conduct_boundary.c -Iinclude -o conduct_boundary.o
+
+-Main
+main function:		gcc -c src/main.c -Iinclude -o main.o
+
+
+-Linker
+Wave Physics		gcc create_folder.o plasma_params.o write_file.o field_assemble.o B_field.o E_field.o read_input.o main.o -o execute -lm -fopenmp
+Parametric Studies	gcc create_folder.o plasma_params.o write_file.o conduct_boundary.o read_input.o main.o -o execute -lm -fopenmp
+
+gcc -c src/gridInit.c -Iinclude -o build/gridInit.o
+gcc -c src/update.c -Iinclude -o build/update.o
+gcc -c src/abc.c -Iinclude -o build/abc.o
+gcc -c src/ezinc.c -Iinclude -o build/ezinc.o
+gcc -c src/tfsf.c -Iinclude -o build/tfsf.o
+
+gcc build/abc.o build/ezinc.o build/gridInit.o build/tfsf.o build/update.o build/main.o -lm -o run
