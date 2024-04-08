@@ -1,0 +1,12 @@
+This is a list of all compilers for the codes: 
+
+-Main
+main function:		gcc -c src/main.c -Iinclude -o main.o
+
+gcc -c src/gridInit.c -Iinclude -o build/gridInit.o
+gcc -c src/update.c -Iinclude -o build/update.o
+gcc -c src/abc.c -Iinclude -o build/abc.o
+gcc -c src/ezinc.c -Iinclude -o build/ezinc.o
+gcc -c src/tfsf.c -Iinclude -o build/tfsf.o
+
+gcc build/abc.o build/ezinc.o build/gridInit.o build/tfsf.o build/update.o build/main.o -lm -o run
