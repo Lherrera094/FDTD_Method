@@ -1,13 +1,14 @@
-/*TFSF Boundary: FDTD method for 1D code
-TFSF boundary between hy[49] and ez[50] and 
-dielectric material starting at ez[100]*/
+/*TMz simulation with Ricker source at center of Grid*/
 
-#include "fdtd.h"
+#include "fdtd-alloc1.h"
+#include "fdtd-macros-tmz.h"
+#include "fdtd-proto1.h"
+#include "ezinc.h"
 #include <time.h>
 
-void writeFile(Grid *grid){
+void writeFile(Grid *g){
     char filename[100];
-    sprintf(filename, "data/time=%d.csv", grid->time);
+    sprintf(filename, "data/time=%d.csv", g->time);
 
     FILE *fptr = fopen(filename, "w");
 
@@ -15,9 +16,9 @@ void writeFile(Grid *grid){
         printf("Error opening the file. \n");
     }
 
-    fprintf(fptr, "pos,Hy,Ez\n");
-    for(int i = 0; i < grid->sizeX; i++){
-        fprintf(fptr, "%d,%.5f,%.5f\n", i, grid->hy[i], grid->ez[i]);
+    fprintf(fptr, "pos,Hx,Hy,Ez\n");
+    for(int i = 0; i < g->sizeX; i++){
+        fprintf(fptr, "%d,%.5f,%.5f, %.5f\n", i, g->hx[i], g->hy[i], g->ez[i]);
     }
     
     fclose(fptr);
@@ -31,21 +32,20 @@ int main(){
     
     Grid *g;                //Declares a pointer to the struct g               
 
-    ALLOC_2D(g, 1, Grid);   //Allocates in memmory the space for pointer to structure g
+    ALLOC_1D(g, 1, Grid);   //Allocates in memmory the space for pointer to structure g
 
     gridInit(g);
-    abcInit(g);
-    tfsfInit(g);
+    ezIncInit(g);
 
     /*do time stepping*/
     for(Time = 0; Time < MaxTime; Time++){
-        updateH(g);     //Update mgnetic field
-        tfsfUpdate(g);  //correct on TFSF boundary
-        abc(g);         //Apply ABC
-        updateE(g);     //update electric field
+        updateH2d(g);     //Update mgnetic field
+        updateE2d(g);     //update electric field
+
+        Ez(SizeX / 2, SizeY / 2) = ezInc(Time, 0.0);
         
         writeFile(g);   //save file
-    }
+    }//end of time stepping
 
     end = clock();
     cpu_time_used = ( (double)(end-start) )/CLOCKS_PER_SEC;

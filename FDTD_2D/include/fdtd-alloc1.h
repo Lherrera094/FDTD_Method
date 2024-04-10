@@ -24,3 +24,5 @@
             "Allocation failed for" #PNTR ". \n");              \
         exit(-1);                                               \
     }
+    
+#endif

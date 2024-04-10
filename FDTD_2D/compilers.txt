@@ -1,12 +1,10 @@
 This is a list of all compilers for the codes: 
 
 -Main
-main function:		gcc -c src/main.c -Iinclude -o main.o
+main function:		gcc -c src/main.c -Iinclude -o build/main.o
 
 gcc -c src/gridInit.c -Iinclude -o build/gridInit.o
 gcc -c src/update.c -Iinclude -o build/update.o
-gcc -c src/abc.c -Iinclude -o build/abc.o
-gcc -c src/ezinc.c -Iinclude -o build/ezinc.o
-gcc -c src/tfsf.c -Iinclude -o build/tfsf.o
+gcc -c src/ricker.c -Iinclude -o build/ricker.o
 
-gcc build/abc.o build/ezinc.o build/gridInit.o build/tfsf.o build/update.o build/main.o -lm -o run
+gcc build/gridInit.o build/ricker.o build/update.o build/main.o -lm -o run

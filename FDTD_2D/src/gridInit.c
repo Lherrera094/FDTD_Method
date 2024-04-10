@@ -1,44 +1,51 @@
 /*Function Initialize Grid structure*/
 
-#include "fdtd.h"
-
-#define LOSS 0.0253146
-#define LOSS_LAYER 100
-#define EPSR 4.0
+#include "fdtd-macros-tmz.h"
+#include "fdtd-alloc1.h"
+#include <math.h>
 
 void gridInit(Grid *g){
     double imp0 = 377.0;
-    int mm;
+    int mm, nn;
 
-    SizeX = 200;
-    MaxTime = 450;
-    Cdtds = 1.0;
+    Type = tmZGrid;
+    SizeX = 101;
+    SizeY = 81;
+    MaxTime = 300;
+    Cdtds = 1.0 / sqrt(2.0);
 
-    ALLOC_1D(g->ez,     SizeX,      double);
-    ALLOC_1D(g->ceze,   SizeX,      double);
-    ALLOC_1D(g->cezh,   SizeX,      double);
-    ALLOC_1D(g->hy,     SizeX - 1,  double);
-    ALLOC_1D(g->chyh,   SizeX - 1,  double);
-    ALLOC_1D(g->chye,   SizeX - 1,  double);
+    ALLOC_2D(g->hx,     SizeX,    SizeY - 1, double);
+    ALLOC_2D(g->chxh,   SizeX,    SizeY - 1, double);
+    ALLOC_2D(g->chxe,   SizeX,    SizeY - 1, double);
+    ALLOC_2D(g->hy,     SizeX - 1,SizeY,     double);
+    ALLOC_2D(g->chyh,   SizeX - 1,SizeY,     double);
+    ALLOC_2D(g->chye,   SizeX - 1,SizeY,     double);
+    ALLOC_2D(g->ez,     SizeX,    SizeY,     double);
+    ALLOC_2D(g->ceze,   SizeX,    SizeY,     double);
+    ALLOC_2D(g->cezh,   SizeX,    SizeY,     double);
 
     /*set eletric field update coefficients*/
     for(mm = 0; mm < SizeX; mm++){
-        
-        if(mm < 100){
-            Ceze(mm) = 1.0;
-            Cezh(mm) = imp0;
-        }else{
-            Ceze(mm) = (1.0 - LOSS) / (1.0 + LOSS);
-            Cezh(mm) = (imp0 / EPSR) / (1.0 + LOSS);
+        for(nn = 0; nn < SizeY; nn++){
+            Ceze(mm, nn) = 1.0;
+            Cezh(mm, nn) = Cdtds * imp0;
         }
     }//end for electric field 
 
     /*set magnetic field update coefficients*/
+    for(mm = 0; mm < SizeX; mm++){
+        for(nn = 0; nn < SizeY - 1; nn++){
+            Chxh(mm, nn) = 1.0;
+            Chxe(mm, nn) = Cdtds / imp0;
+        }
+    }
+
     for(mm = 0; mm < SizeX - 1; mm++){
-        Chyh(mm) = 1.0;
-        Chye(mm) = 1.0 / imp0; 
+        for(nn = 0; nn < SizeY; nn++){
+            Chyh(mm, nn) = 1.0;
+            Chye(mm, nn) = 1.0 / imp0; 
+        }
     }//end for electric field
 
     return;
-    
 }
