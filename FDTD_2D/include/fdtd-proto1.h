@@ -10,9 +10,10 @@ void abc(Grid *g);*/
 
 void gridInit(Grid *g);
 
-/*void saveFile(Grid *g);
+void snapshotInit2d(Grid *g);
+void snapshot2d(Grid *g);
 
-void tfsfInit(Grid *g);
+/*void tfsfInit(Grid *g);
 void tfsfUpdate(Grid *g);
 */
 

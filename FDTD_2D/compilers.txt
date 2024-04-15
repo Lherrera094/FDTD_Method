@@ -6,5 +6,6 @@ main function:		gcc -c src/main.c -Iinclude -o build/main.o
 gcc -c src/gridInit.c -Iinclude -o build/gridInit.o
 gcc -c src/update.c -Iinclude -o build/update.o
 gcc -c src/ricker.c -Iinclude -o build/ricker.o
+gcc -c src/snapshot2d.c -Iinclude -o build/snapshot2d.o
 
-gcc build/gridInit.o build/ricker.o build/update.o build/main.o -lm -o run
+gcc build/gridInit.o build/ricker.o build/update.o build/snapshot2d.o build/main.o -lm -o run

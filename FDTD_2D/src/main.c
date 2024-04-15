@@ -36,6 +36,7 @@ int main(){
 
     gridInit(g);
     ezIncInit(g);
+    snapshotInit2d(g);
 
     /*do time stepping*/
     for(Time = 0; Time < MaxTime; Time++){
@@ -44,7 +45,7 @@ int main(){
 
         Ez(SizeX / 2, SizeY / 2) = ezInc(Time, 0.0);
         
-        writeFile(g);   //save file
+        snapshot2d(g);
     }//end of time stepping
 
     end = clock();
