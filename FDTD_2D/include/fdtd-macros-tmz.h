@@ -4,8 +4,6 @@
 
 #include "fdtd.h"
 
-#define FILENAME "sim_data.h5"
-
 /*Macros that permit the Grid to be specified*/
 /*One-dimensional Grid*/
 #define Hy1G(G, M)      G->hy[M]

@@ -5,34 +5,39 @@
 #include "fdtd-proto1.h"
 #include "ezinc.h"
 #include <time.h>
-#include <hdf5.h>
+#include <omp.h>
+
+void writeFile(Grid *g){
+    char filename[100];
+    sprintf(filename, "data/time=%d.csv", Time);
+
+    FILE *fptr = fopen(filename, "w");
+
+    if(fptr == NULL){
+        printf("Error opening the file. \n");
+    }
+
+    for(int i = 0; i < SizeX; i++){
+        fprintf(fptr, "%d,",i);
+    }
+    fprintf(fptr, "\n");
+
+    //pragma omp for
+    for(int mm = 0; mm < SizeY; mm++){
+        for(int nn = 0; nn < SizeX; nn++){
+            fprintf(fptr, "%.5f,", Ez(mm,nn));
+        }
+        fprintf(fptr, "\n"); 
+    }
+    
+    fclose(fptr);
+}
 
 int main(){
 
     clock_t start, end;
     double cpu_time_used;
     start = clock();
-
-    hid_t file_id, group_id, dataset_id, dataspace_id;
-    herr_t status;
-
-    /*Initialize the HDF5 library*/
-    status = H5open();
-    if( status < 0){
-        fprintf(stderr, "Error: Unable to initialize the HDF5 library.");
-        return EXIT_FAILURE;
-    }else{
-        fprintf("HDF5 library initialized. \n");
-    }
-
-    /*Create new HDF5*/
-    file_id = H5Fcreate(FILENAME, HF5_ACC_TRUNC, H5P_DEFAULT, H5P_DEFALT);
-    if( file_id < 0){
-        fprintf(stderr, "Error: Unable to create HDF5 file.");
-        return EXIT_FAILURE;
-    }else{
-        fprintf("HDF5 file created. \n");
-    }
     
     Grid *g;                //Declares a pointer to the struct g               
 
@@ -49,7 +54,8 @@ int main(){
 
         Ez(SizeX / 2, SizeY / 2) = ezInc(Time, 0.0);
         
-        snapshot2d(g);
+        writeFile(g);
+        //snapshot2d(g);
     }//end of time stepping
 
     end = clock();

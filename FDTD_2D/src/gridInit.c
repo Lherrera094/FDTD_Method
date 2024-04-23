@@ -43,7 +43,7 @@ void gridInit(Grid *g){
     for(mm = 0; mm < SizeX - 1; mm++){
         for(nn = 0; nn < SizeY; nn++){
             Chyh(mm, nn) = 1.0;
-            Chye(mm, nn) = 1.0 / imp0; 
+            Chye(mm, nn) = Cdtds / imp0; 
         }
     }//end for electric field
 
