@@ -3,8 +3,9 @@ Repository to study and understand the Finite-Difference Time-Domain numerical m
 
 **Description**: 
 
-* **FDTD_1D**: .
-
-![Couplings](/FDTD_2D/animated_EM.gif)
+* **FDTD_1D**: 
 
 ![Couplings](/FDTD_1D_TFSF/animated_plot.gif)
+
+* **FDTD_2D**: 
+![Couplings](/FDTD_2D/animated_EM.gif)
