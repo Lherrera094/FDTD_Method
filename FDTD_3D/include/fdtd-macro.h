@@ -1,7 +1,7 @@
 #ifndef _FDTD_MACRO_H
 #define _FDTD_MACRO_H
 
-#include "fdtd-grid1.h"
+#include "fdtd.h"
 
 /* macros that permit the "Grid" to be specified */
 /* one-dimensional grid */

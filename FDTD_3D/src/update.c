@@ -2,6 +2,7 @@
 
 #include "fdtd-macro.h"
 #include <stdio.h>
+#include <omp.h>
 
 /* update magnetic field */
 void updateH(Grid *g) {
@@ -87,7 +88,10 @@ void updateE(Grid *g) {
                 Ey2(mm, nn) = Ceye2(mm, nn) * Ey2(mm, nn) -
                               Ceyh2(mm, nn) * (Hz2(mm, nn) - Hz2(mm - 1, nn));
 
+    
+
     } else if (Type == threeDGrid) {
+    
         for (mm = 0; mm < SizeX - 1; mm++)
             for (nn = 1; nn < SizeY - 1; nn++)
                 for (pp = 1; pp < SizeZ - 1; pp++)

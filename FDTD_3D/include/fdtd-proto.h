@@ -10,14 +10,10 @@ void abc(Grid *g);
 
 void gridInit(Grid *g);
 
-void snapshotInit2d(Grid *g);
-void snapshot2d(Grid *g);
+void snapshot3dInit(Grid *g);
+void snapshot3d(Grid *g);
 
-/*void tfsfInit(Grid *g);
-void tfsfUpdate(Grid *g);
-*/
-
-void updateE2d(Grid *g);
-void updateH2d(Grid *g);
+void updateE(Grid *g);
+void updateH(Grid *g);
 
 #endif

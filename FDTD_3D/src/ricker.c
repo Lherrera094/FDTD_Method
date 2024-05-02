@@ -25,5 +25,5 @@ double ezInc(double time, double location){
     arg = 3.1415 * ( (cdtds * time - location) / ppw - 1.0);
     arg = arg * arg;
 
-    return (1.0 - 2.0 * arg) * exp(-arg);
+    return sin(2.0 * M_PI / ppw * (cdtds * time - location));
 }

@@ -7,12 +7,11 @@ static char basename[80];
 
 void snapshot3dInit(Grid *g) {
     int choice;
-
-    printf("Do you want 2D snapshots of the 3D grid? (1=yes, 0=no) ");
+    printf("Do you want 2D snapshots of the 3D grid? (1=yes, 0=no)");
     scanf("%d", &choice);
     if (choice == 0) {
         temporalStride = -1;
-        return;
+    return;
     }
 
     printf("Duration of simulation is %d steps.\n", MaxTime);
@@ -30,16 +29,17 @@ void snapshot3d(Grid *g) {
     FILE *out;
     /* ensure temporal stride set to a reasonable value */
     if (temporalStride == -1) {
-    return;
+        return;
     } if (temporalStride < -1) {
         fprintf(stderr,
-            "snapshot2d: snapshotInit2d must be called before snapshot.\n"
-            "Temporal stride must be set to positive value.\n");
+        "snapshot2d: snapshotInit2d must be called before snapshot.\n"
+        "Temporal stride must be set to positive value.\n");
         exit(-1);
     }
 
     /* get snapshot if temporal conditions met */
-    if (Time >= startTime && (Time - startTime) % temporalStride == 0) {
+    if (Time >= startTime &&
+        (Time - startTime) % temporalStride == 0) {
 
         /************ write the constant-x slice ************/
         sprintf(filename, "%s-x.%d", basename, frameX++);
@@ -59,7 +59,8 @@ void snapshot3d(Grid *g) {
                 fwrite(&temp, sizeof(float), 1, out); // write the float
             }
 
-        fclose(out);        // close file
+        fclose(out);
+        // close file
 
         /************ write the constant-y slice ************/
         sprintf(filename, "%s-y.%d", basename, frameY++);
@@ -78,9 +79,8 @@ void snapshot3d(Grid *g) {
                 temp = (float)Ex(mm, nn, pp); // store data as a float
                 fwrite(&temp, sizeof(float), 1, out); // write the float
             }
-
-        fclose(out);// close file
+        fclose(out); // close file
     }
 
     return;
-} /* end snapshot3d() */
+}
